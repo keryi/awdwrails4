@@ -5,4 +5,7 @@ class SayController < ApplicationController
 
   def bye
   end
+
+  def playtime
+  end
 end

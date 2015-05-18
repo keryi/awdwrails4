@@ -1,0 +1,14 @@
+<h1>Playtime</h1>
+<p>1 + 1 = <%= 1 + 1 %></p>
+<p>"cow" + "boy" is <%= "cow" + "boy" %></p>
+<p>1 hour from now is: <%= 1.hour.from_now.localtime %></p>
+<p>
+  List of files in current directory
+  <ul>
+    <% Dir.glob('*').each do |file| %>
+      <li>
+        <%= file %>
+      </li>
+    <% end %>
+  </ul>
+</p>
