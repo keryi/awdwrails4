@@ -7,6 +7,6 @@ class StoreControllerTest < ActionController::TestCase
     assert_select '#columns #side a', minimum: 4
     assert_select '#main .entry', 3
     assert_select 'h3', 'Programming Ruby 1.9'
-    assert_select '.price', /\$[,\d]+\.\d{2}/
+    assert_select '.price', /RM[,\d]+\.\d{2}/
   end
 end
