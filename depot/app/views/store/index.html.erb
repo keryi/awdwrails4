@@ -2,6 +2,11 @@
   <p id="notice"><%= notice %></p>
 <% end %>
 <h1>Your Pragmatic Catalog</h1>
+<% if session[:counter] > 5 %>
+<p>
+  You have view this page for <%= "#{pluralize session[:counter], 'time'}" %>
+</p>
+<% end %>
 <% cache ['store', Product.latest] do %>
   <% @products.each do |product| %>
     <% cache ['entry', product] do %>
