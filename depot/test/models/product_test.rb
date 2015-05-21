@@ -61,4 +61,22 @@ class ProductTest < ActiveSupport::TestCase
     assert product.invalid?
     assert_equal [I18n.translate('errors.messages.taken')], product.errors[:title]
   end
+
+  test "product is not valid without a unique image_url" do
+    product = Product.new title: 'A title',
+      description: 'A description',
+      price: 7.77,
+      image_url: products(:ruby).image_url
+
+    assert product.invalid?
+    assert_equal [I18n.translate('errors.messages.taken')], product.errors[:image_url]
+  end
+
+  test "product is not valid with price more than 10000" do
+    product = products(:ruby)
+    product.price = 10001
+
+    assert product.invalid?
+    assert_equal ['must be less than or equal to 10000'], product.errors[:price]
+  end
 end
