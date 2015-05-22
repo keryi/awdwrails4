@@ -2,7 +2,7 @@ class LineItemsController < ApplicationController
   include CurrentCart
   before_action :set_cart, only: [:create]
   before_action :reset_view_count, only: [:create]
-  before_action :set_line_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_line_item, only: [:show, :edit, :update, :destroy, :decrement]
 
   # GET /line_items
   # GET /line_items.json
@@ -64,6 +64,21 @@ class LineItemsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to store_url, notice: 'Line item was successfully removed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def decrement
+    @cart = @line_item.cart
+    @line_item.quantity -= 1
+    if @line_item.quantity == 0
+      @line_item.destroy
+    else
+      @line_item.save
+    end
+
+    respond_to do |format|
+      format.js
+      format.html { redirect_to store_url, notice: "Reduce 1 #{@line_item.product.title} from your cart." }
     end
   end
 
