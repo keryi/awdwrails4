@@ -58,4 +58,37 @@ class UserStoriesTest < ActionDispatch::IntegrationTest
     assert_equal ['support@depot.com'], mail.from
     assert_equal 'Pragmatic Store Order Confirmation', mail.subject
   end
+
+  test "Shiping a product" do
+    order = orders :one
+    get edit_order_url(order)
+    assert_response :success
+    assert_template 'edit'
+
+    put_via_redirect order_url(order),
+      order: {
+        ship_date: Date.today
+      }
+    assert_response :success
+    assert_template 'show'
+
+    order = Order.find orders(:one).id
+    assert_equal Date.today, order.ship_date
+
+    # 6 email verification
+    mail = ActionMailer::Base.deliveries.last
+    assert_equal ['dave@example.org'], mail.to
+    assert_equal ['support@depot.com'], mail.from
+    assert_equal 'Pragmatic Store Order Shipped', mail.subject
+  end
+
+  test "Notify admin when there is an attempt to access invalid cart" do
+    Cart.delete_all
+    get cart_url('hello')
+    assert_response 302
+
+    mail = ActionMailer::Base.deliveries.last
+    assert_equal 'System Error', mail.subject
+    assert_match /Attempt to access invalid cart/, mail.body.encoded
+  end
 end

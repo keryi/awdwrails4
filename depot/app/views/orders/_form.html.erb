@@ -28,7 +28,13 @@
     <%= f.select :pay_type, PayType.all.map(&:name),
       prompt: 'Select a payment type' %>
   </div>
+  <% if @order.persisted? %>
+  <div class="field">
+    <%= f.label :ship_date %><br>
+    <%= f.date_select :ship_date %>
+  </div>
+  <% end %>
   <div class="actions">
-    <%= f.submit 'Place Order' %>
+    <%= f.submit @order.persisted? ? 'Update Order' : 'Place Order' %>
   </div>
 <% end %>
