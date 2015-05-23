@@ -61,6 +61,9 @@ class UserStoriesTest < ActionDispatch::IntegrationTest
 
   test "Shiping a product" do
     order = orders :one
+    user = users :one
+    post login_url, { name: user.name, password: 'secret' }
+    
     get edit_order_url(order)
     assert_response :success
     assert_template 'edit'
