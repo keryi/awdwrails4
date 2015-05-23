@@ -84,9 +84,9 @@ class UserStoriesTest < ActionDispatch::IntegrationTest
 
   test "Notify admin when there is an attempt to access invalid cart" do
     Cart.delete_all
-    get cart_url('hello')
-    assert_response 302
-
+    user = users :one
+    post login_url, { name: user.name, password: 'secret' }
+    get cart_url 'invalid'
     mail = ActionMailer::Base.deliveries.last
     assert_equal 'System Error', mail.subject
     assert_match /Attempt to access invalid cart/, mail.body.encoded
