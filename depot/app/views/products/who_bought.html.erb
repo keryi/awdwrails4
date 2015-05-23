@@ -1,0 +1,42 @@
+<%= image_tag @product.image_url %>
+<p><b>Title: </b></p>
+<p><%= @product.title %></p>
+<p><b>Description: </b><%= sanitize @product.description %></p>
+<table>
+  <tr>
+    <th>
+      Order Id
+    </th>
+    <th>
+      Customer
+    </th>
+    <th>
+      Address
+    </th>
+    <th>
+      Email
+    </th>
+    <th>
+      Paid By
+    </th>
+  </tr>
+  <% @product.orders.each do |order| %>
+    <tr>
+      <td>
+        <%= order.id %>
+      </td>
+      <td>
+        <%= order.name %>
+      </td>
+      <td>
+        <%= order.address %>
+      </td>
+      <td>
+        <%= order.email %>
+      </td>
+      <td>
+        <%= order.pay_type %>
+      </td>
+    </tr>
+  <% end %>
+</table>

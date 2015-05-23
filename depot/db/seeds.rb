@@ -15,3 +15,9 @@ Product.create! title: 'Programming 1.9 & 2.0',
   },
   image_url: 'ruby.jpg',
   price: 49.95
+
+unless PayType.any?
+  ['Check', 'Credit card', 'Purchase order'].each do |name|
+    PayType.create! name: name
+  end
+end
