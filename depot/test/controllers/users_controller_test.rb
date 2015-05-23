@@ -34,9 +34,27 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should update user" do
-    patch :update, id: @user, user: { name: 'Jenny', password: 'secret', password_confirmation: 'secret' }
+  test "should update user with correct current password" do
+    patch :update, id: @user,
+      user: {
+        name: 'Jenny',
+        current_password: 'secret',
+        password: 'secret',
+        password_confirmation: 'secret'
+      }
     assert_redirected_to users_path
+  end
+
+  test "should not update user with incorrect current password" do
+    patch :update, id: @user,
+      user: {
+        name: 'Jenny',
+        current_password: 'wrong',
+        password: 'secret',
+        password_confirmation: 'secret'
+      }
+    assert_redirected_to edit_user_path(@user)
+    assert_equal flash[:notice], 'Incorrect current password'
   end
 
   test "should destroy user" do

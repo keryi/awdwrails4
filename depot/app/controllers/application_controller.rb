@@ -7,8 +7,13 @@ class ApplicationController < ActionController::Base
   private
 
   def authorize
-    unless User.find_by id: session[:user_id]
-      redirect_to login_url, notice: 'Please log in'
+    if request.format == Mime::HTML
+      user = User.find_by id: session[:user_id]
+    else
+      user = authenticate_or_request_with_http_basic do |name, pass|
+        User.find_by(name: name).try(:authenticate, pass)
+      end
     end
+    redirect_to login_url, notice: 'Please log in' unless user
   end
 end

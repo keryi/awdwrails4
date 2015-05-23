@@ -41,14 +41,19 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    current_password = params[:user].delete :current_password
     respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to users_url,
-          notice: "User #{@user.name} was successfully updated." }
-        format.json { render :show, status: :ok, location: @user }
+      if @user.authenticate(current_password)
+        if @user.update(user_params)
+          format.html { redirect_to users_url,
+            notice: "User #{@user.name} was successfully updated." }
+          format.json { render :show, status: :ok, location: @user }
+        else
+          format.html { render :edit }
+          format.json { render json: @user.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.html { redirect_to edit_user_path(@user), notice: 'Incorrect current password' }
       end
     end
   end
@@ -76,6 +81,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :password, :password_confirmation)
+      params.require(:user).permit(:name, :password, :password_confirmation, :current_password)
     end
 end

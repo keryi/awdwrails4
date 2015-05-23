@@ -24,4 +24,13 @@ class SessionsControllerTest < ActionController::TestCase
     assert_redirected_to store_url
   end
 
+  test "should create an admin if no user in database" do
+    User.delete_all
+    post :create, { name: 'David', password: 'secret' }
+    assert_redirected_to admin_url
+    user = User.first
+    assert_equal "#{user.name} has become the administrator", flash[:notice]
+    assert 1, User.count
+    assert user.id, session[:user_id]
+  end
 end
