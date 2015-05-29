@@ -3,11 +3,11 @@
 one:
   title: MyString
   description: MyText
-  content_type: MyString
-  data: 
+  content_type: image/jpeg
+  data:
 
 two:
   title: MyString
   description: MyText
-  content_type: MyString
-  data: 
+  content_type: image/jpeg
+  data:
